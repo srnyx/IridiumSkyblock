@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class EntityTargetListener implements Listener {
 
-    private final CooldownProvider<Entity> cooldownProvider = CooldownProvider.newInstance(Duration.ofMillis(500));
+    private final CooldownProvider<Entity> cooldownProvider = CooldownProvider.newInstance(Duration.ofMillis(1000));
 
     @EventHandler
     public void onEntityTargetEntity(EntityTargetLivingEntityEvent event) {
