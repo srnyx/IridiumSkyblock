@@ -153,8 +153,8 @@ public class IslandLogsGUI extends IslandGUI {
      */
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!event.getClick().equals(ClickType.LEFT) && !event.getClick().equals(ClickType.RIGHT)) return;
-        int i = event.getClick().equals(ClickType.LEFT) ? -1 : 1;
+        if (!event.getClick().equals(ClickType.RIGHT) && !event.getClick().equals(ClickType.LEFT)) return;
+        int i = event.getClick().equals(ClickType.RIGHT) ? -1 : 1;
         LogInventoryConfig logInventoryConfig = IridiumSkyblock.getInstance().getInventories().logsGUI;
         if (event.getSlot() == logInventoryConfig.IslandMembers.slot) {
             if (canChangePage(membersPage, i, LogAction.USER_JOINED, LogAction.USER_KICKED, LogAction.USER_LEFT, LogAction.USER_DEMOTED, LogAction.USER_PROMOTED)) {
