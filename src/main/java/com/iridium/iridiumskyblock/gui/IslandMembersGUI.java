@@ -59,10 +59,10 @@ public class IslandMembersGUI extends IslandGUI {
 
             String command;
             switch (event.getClick()) {
-                case LEFT:
+                case RIGHT:
                     command = IridiumSkyblock.getInstance().getCommands().demoteCommand.aliases.get(0);
                     break;
-                case RIGHT:
+                case LEFT:
                     command = IridiumSkyblock.getInstance().getCommands().promoteCommand.aliases.get(0);
                     break;
                 default:
