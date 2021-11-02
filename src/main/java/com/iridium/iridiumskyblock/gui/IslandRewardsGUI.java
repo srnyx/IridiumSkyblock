@@ -41,7 +41,7 @@ public class IslandRewardsGUI extends IslandGUI {
             IslandReward islandReward = islandRewards.get(event.getSlot());
             islandReward.getReward().claim((Player) event.getWhoClicked(), getIsland());
             IridiumSkyblock.getInstance().getDatabaseManager().getIslandRewardTableManager().delete(islandReward);
-            event.getWhoClicked().closeInventory();
+//            event.getWhoClicked().closeInventory();
         }
     }
 }
