@@ -26,5 +26,5 @@ jobs:
     - name: Upload artifacts
       uses: "actions/upload-artifact@v2.2.3"
       with:
-        name: "IridiumSkyblock"
-        path: "build/libs/IridiumSkyblock-*.jar"
+        name: "IridiumSkyblock-srnyx"
+        path: "build/libs/IridiumSkyblock-srnyx-*.jar"
