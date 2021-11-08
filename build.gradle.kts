@@ -5,13 +5,8 @@ plugins {
 }
 
 group = "com.iridium"
-<<<<<<< HEAD
-version = "3.1.5.1"
-description = "IridiumSkyblock-srnyx"
-=======
 version = "3.1.6"
 description = "IridiumSkyblock"
->>>>>>> 56b442003f66a87933760511e578db436e2f74aa
 
 repositories {
     mavenCentral()
