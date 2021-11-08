@@ -215,7 +215,7 @@ public class IslandManager {
             return false;
         }
 
-        if (getIslandByName(name).isPresent()) {
+        if (name != null && getIslandByName(name).isPresent()) {
             player.sendMessage(StringUtils.color(IridiumSkyblock.getInstance().getMessages().islandWithNameAlreadyExists.replace("%prefix%", IridiumSkyblock.getInstance().getConfiguration().prefix)));
             return false;
         }
@@ -243,20 +243,20 @@ public class IslandManager {
      * @param schematic The schematic of the Island
      * @return The island being created
      */
-    private @NotNull CompletableFuture<Island> createIsland(@NotNull Player player, @NotNull String name, @NotNull Schematics.SchematicConfig schematic) {
+    private @NotNull CompletableFuture<Island> createIsland(@NotNull Player player, String name, @NotNull Schematics.SchematicConfig schematic) {
         clearIslandCache();
         CompletableFuture<Island> completableFuture = new CompletableFuture<>();
-        final User user = IridiumSkyblock.getInstance().getUserManager().getUser(player);
-        IridiumSkyblock.getInstance().getDatabaseManager().registerIsland(new Island(name, schematic)).thenAccept((island) ->
-                Bukkit.getScheduler().runTask(IridiumSkyblock.getInstance(), () -> {
-                    user.setIsland(island);
-                    user.setIslandRank(IslandRank.OWNER);
+        Bukkit.getScheduler().runTaskAsynchronously(IridiumSkyblock.getInstance(), () -> {
+            User user = IridiumSkyblock.getInstance().getUserManager().getUser(player);
+            Island island = new Island(name, schematic);
 
-                    pasteSchematic(island, schematic).thenRun(() -> {
-                        completableFuture.complete(island);
-                    });
-                })
-        );
+            IridiumSkyblock.getInstance().getDatabaseManager().registerIsland(island).join();
+
+            user.setIsland(island);
+            user.setIslandRank(IslandRank.OWNER);
+
+            Bukkit.getScheduler().runTask(IridiumSkyblock.getInstance(), () -> pasteSchematic(island, schematic).thenRun(() -> completableFuture.complete(island)));
+        });
         return completableFuture;
     }
 
@@ -849,7 +849,7 @@ public class IslandManager {
      * @param island The specified Island
      */
     public void recalculateIsland(@NotNull Island island) {
-        getIslandChunks(island, getWorld(), getNetherWorld(), getEndWorld()).thenAccept(chunks -> {
+        getIslandChunks(island, getWorld(), getNetherWorld(), getEndWorld()).thenAcceptAsync(chunks -> {
             IridiumSkyblock.getInstance().getDatabaseManager().getIslandBlocksTableManager().getEntries(island).forEach(islandBlocks -> islandBlocks.setAmount(0));
             IridiumSkyblock.getInstance().getDatabaseManager().getIslandSpawnersTableManager().getEntries(island).forEach(islandSpawners -> islandSpawners.setAmount(0));
 
