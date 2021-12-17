@@ -32,8 +32,8 @@ public class IslandPermissionsGUI extends IslandGUI {
      * @param island     The Island this GUI belongs to
      * @param islandRank The rank which is being configured
      */
-    public IslandPermissionsGUI(@NotNull Island island, @NotNull IslandRank islandRank, int page) {
-        super(IridiumSkyblock.getInstance().getInventories().islandPermissionsGUI, island);
+    public IslandPermissionsGUI(@NotNull Island island, @NotNull IslandRank islandRank, Inventory previousInventory, int page) {
+        super(IridiumSkyblock.getInstance().getInventories().islandPermissionsGUI, previousInventory, island);
         this.islandRank = islandRank;
         this.page = page;
     }
@@ -49,6 +49,10 @@ public class IslandPermissionsGUI extends IslandGUI {
             if (permission.getValue().getPage() != page) continue;
             boolean allowed = IridiumSkyblock.getInstance().getIslandManager().getIslandPermission(getIsland(), islandRank, permission.getValue(), permission.getKey());
             inventory.setItem(permission.getValue().getItem().slot, ItemStackUtils.makeItem(permission.getValue().getItem(), Collections.singletonList(new Placeholder("permission", allowed ? IridiumSkyblock.getInstance().getPermissions().allowed : IridiumSkyblock.getInstance().getPermissions().denied))));
+        }
+
+        if (IridiumSkyblock.getInstance().getConfiguration().backButtons && getPreviousInventory() != null) {
+            inventory.setItem(inventory.getSize() + IridiumSkyblock.getInstance().getInventories().backButton.slot, ItemStackUtils.makeItem(IridiumSkyblock.getInstance().getInventories().backButton));
         }
     }
 
@@ -75,16 +79,21 @@ public class IslandPermissionsGUI extends IslandGUI {
             return;
         }
 
-       if (event.getSlot() == getNoItemGUI().size - 7 && page > 1) {
+       if (event.getSlot() == getNoItemGUI().size - 7 && hasPage(page - 1)) {
            page--;
            event.getWhoClicked().openInventory(getInventory());
            return;
        }
        
-       if (event.getSlot() == getNoItemGUI().size - 3) {
+       if (event.getSlot() == getNoItemGUI().size - 3 && hasPage(page + 1)) {
            page++;
            event.getWhoClicked().openInventory(getInventory());
        }
+    }
+
+    private boolean hasPage(int page) {
+        return IridiumSkyblock.getInstance().getPermissionList().entrySet().stream()
+                .anyMatch(entry -> entry.getValue().getPage() == page);
     }
 
 }

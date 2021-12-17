@@ -1,21 +1,21 @@
 package com.iridium.iridiumskyblock.commands;
 
-import com.iridium.iridiumcore.dependencies.xseries.XMaterial;
 import com.iridium.iridiumcore.utils.StringUtils;
 import com.iridium.iridiumskyblock.IridiumSkyblock;
 import com.iridium.iridiumskyblock.PermissionType;
 import com.iridium.iridiumskyblock.database.Island;
 import com.iridium.iridiumskyblock.database.IslandWarp;
 import com.iridium.iridiumskyblock.database.User;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class DeleteWarpCommand extends Command {
 
@@ -82,25 +82,10 @@ public class DeleteWarpCommand extends Command {
     public List<String> onTabComplete(CommandSender commandSender, org.bukkit.command.Command command, String label, String[] args) {
         Optional<Island> island = IridiumSkyblock.getInstance().getUserManager().getUser((OfflinePlayer) commandSender).getIsland();
         List<IslandWarp> islandWarps = island.isPresent() ? IridiumSkyblock.getInstance().getDatabaseManager().getIslandWarpTableManager().getEntries(island.get()) : Collections.emptyList();
-        if (args.length == 2) {
-            return islandWarps.stream()
-                .map(IslandWarp::getName)
-                .collect(Collectors.toList());
-        }
 
-        if (args.length == 3) {
-            return Arrays.asList("icon", "description");
-        }
-
-        if (args.length == 4) {
-            if (args[2].equalsIgnoreCase("icon")) {
-                return Arrays.stream(XMaterial.values())
-                    .map(XMaterial::name)
-                    .collect(Collectors.toList());
-            }
-        }
-
-        return Collections.emptyList();
+        return islandWarps.stream()
+            .map(IslandWarp::getName)
+            .collect(Collectors.toList());
     }
 
 }

@@ -6,18 +6,17 @@ import com.iridium.iridiumskyblock.database.Island;
 import com.iridium.iridiumskyblock.database.IslandBooster;
 import com.iridium.iridiumskyblock.database.User;
 import com.iridium.iridiumskyblock.managers.IslandManager;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Placeholders {
 
@@ -55,6 +54,9 @@ public class Placeholders {
                 )
                 .put(startKey + "_value", player ->
                         islandGetter.getIsland(player).map(Island::getFormattedValue).orElse(placeholdersConfig.islandValue)
+                )
+                .put(startKey + "_extravalue", player ->
+                        islandGetter.getIsland(player).map(island -> IridiumSkyblock.getInstance().getNumberFormatter().format(island.getExtraValue())).orElse(placeholdersConfig.islandExtraValue)
                 )
                 .put(startKey + "_visitable", player ->
                         islandGetter.getIsland(player).map(island -> island.isVisitable() ? IridiumSkyblock.getInstance().getMessages().visitable : IridiumSkyblock.getInstance().getMessages().notVisitable).orElse(placeholdersConfig.islandValue)
@@ -174,9 +176,10 @@ public class Placeholders {
 
     private static Map<String, Placeholder> getIslandTopPlaceholders() {
         HashMap<String, Placeholder> hashmap = new HashMap<>();
+        List<Island> topIslands = IridiumSkyblock.getInstance().getIslandManager().getIslands(IslandManager.SortType.VALUE);
         for (int i = 1; i <= 20; i++) {
-            int finalI = i;
-            hashmap.putAll(getIslandPlaceholders("island_top_" + i, player -> Optional.of(IridiumSkyblock.getInstance().getIslandManager().getIslands(IslandManager.SortType.VALUE).get(finalI - 1))));
+            Optional<Island> island = Optional.ofNullable(topIslands.size() > i ? topIslands.get(i - 1) : null);
+            hashmap.putAll(getIslandPlaceholders("island_top_" + i, player -> island));
         }
         return hashmap;
     }
