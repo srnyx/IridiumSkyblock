@@ -6,7 +6,6 @@ import com.iridium.iridiumskyblock.IridiumSkyblock;
 import com.iridium.iridiumskyblock.PlaceholderBuilder;
 import com.iridium.iridiumskyblock.database.Island;
 import com.iridium.iridiumskyblock.database.User;
-import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,7 @@ public class IslandMembersGUI extends IslandGUI {
      * @param island The Island this GUI belongs to
      */
     public IslandMembersGUI(@NotNull Island island) {
-        super(IridiumSkyblock.getInstance().getInventories().membersGUI, island);
+        super(IridiumSkyblock.getInstance().getInventories().membersGUI, null, island);
         this.members = new HashMap<>();
     }
 
@@ -57,22 +56,22 @@ public class IslandMembersGUI extends IslandGUI {
         if (members.containsKey(event.getSlot())) {
             User user = members.get(event.getSlot());
 
-            String command;
             switch (event.getClick()) {
+<<<<<<< HEAD
                 case RIGHT:
                     command = IridiumSkyblock.getInstance().getCommands().demoteCommand.aliases.get(0);
                     break;
                 case LEFT:
                     command = IridiumSkyblock.getInstance().getCommands().promoteCommand.aliases.get(0);
+=======
+                case LEFT:
+                    IridiumSkyblock.getInstance().getCommands().demoteCommand.execute(event.getWhoClicked(), new String[]{"", user.getName()});
                     break;
-                default:
-                    return;
+                case RIGHT:
+                    IridiumSkyblock.getInstance().getCommands().promoteCommand.execute(event.getWhoClicked(), new String[]{"", user.getName()});
+>>>>>>> c1362d20498f56f5a4d07785405b137ca691b650
+                    break;
             }
-
-            if (command != null) {
-                Bukkit.getServer().dispatchCommand(event.getWhoClicked(), "is " + command + " " + user.getName());
-            }
-
             addContent(event.getInventory());
         }
     }
