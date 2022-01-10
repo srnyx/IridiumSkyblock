@@ -32,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
 @Getter
 public class DatabaseManager {
 
-    private final int version = 3;
+    private final int version = 4;
     private IslandTableManager islandTableManager;
     private UserTableManager userTableManager;
     private ForeignIslandTableManager<IslandBan, Integer> islandBanTableManager;
@@ -61,16 +61,19 @@ public class DatabaseManager {
 
         DataPersisterManager.registerDataPersisters(XMaterialType.getSingleton());
 
-        this.connectionSource = new JdbcConnectionSource(
-                databaseURL,
-                sqlConfig.username,
-                sqlConfig.password,
-                DatabaseTypeUtils.createDatabaseType(databaseURL)
-        );
+        if (!IridiumSkyblock.getInstance().isTesting()) {
+            this.connectionSource = new JdbcConnectionSource(
+                    databaseURL,
+                    sqlConfig.username,
+                    sqlConfig.password,
+                    DatabaseTypeUtils.createDatabaseType(databaseURL)
+            );
 
-        if (connectionSource.getReadWriteConnection(null).isTableExists("islands")) {
-            convertDatabaseData(sqlConfig.driver);
+            if (connectionSource.getReadWriteConnection(null).isTableExists("islands")) {
+                convertDatabaseData(sqlConfig.driver);
+            }
         }
+
         this.islandTableManager = new IslandTableManager(connectionSource);
         this.userTableManager = new UserTableManager(connectionSource);
         this.islandInviteTableManager = new ForeignIslandTableManager<>(connectionSource, IslandInvite.class, Comparator.comparing(IslandInvite::getIslandId).thenComparing(islandInvite -> islandInvite.getUser().getUuid()));
