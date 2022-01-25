@@ -57,19 +57,11 @@ public class IslandMembersGUI extends IslandGUI {
             User user = members.get(event.getSlot());
 
             switch (event.getClick()) {
-<<<<<<< HEAD
                 case RIGHT:
-                    command = IridiumSkyblock.getInstance().getCommands().demoteCommand.aliases.get(0);
-                    break;
-                case LEFT:
-                    command = IridiumSkyblock.getInstance().getCommands().promoteCommand.aliases.get(0);
-=======
-                case LEFT:
                     IridiumSkyblock.getInstance().getCommands().demoteCommand.execute(event.getWhoClicked(), new String[]{"", user.getName()});
                     break;
-                case RIGHT:
+                case LEFT:
                     IridiumSkyblock.getInstance().getCommands().promoteCommand.execute(event.getWhoClicked(), new String[]{"", user.getName()});
->>>>>>> c1362d20498f56f5a4d07785405b137ca691b650
                     break;
             }
             addContent(event.getInventory());
