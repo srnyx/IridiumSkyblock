@@ -26,6 +26,6 @@ jobs:
     - name: Upload artifacts
       uses: "actions/upload-artifact@v3.0.0"
       with:
-        name: "IridiumSkyblock-srnyx"
-        path: "build/libs/IridiumSkyblock-srnyx-*.jar"
+        name: "IridiumSkyblock"
+        path: "build/libs/IridiumSkyblock-*.jar"
         retention-days: 90
