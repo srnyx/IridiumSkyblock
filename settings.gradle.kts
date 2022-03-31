@@ -1,1 +1,1 @@
-rootProject.name = "IridiumSkyblock-srnyx"
+rootProject.name = "IridiumSkyblock"
